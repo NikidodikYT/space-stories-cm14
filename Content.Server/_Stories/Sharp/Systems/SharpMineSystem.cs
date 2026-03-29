@@ -3,7 +3,7 @@ using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.OnCollide;
-using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared._Stories.Sharp;
 using Content.Shared.Damage;
 using Content.Shared.Explosion.Components;
@@ -80,12 +80,6 @@ public sealed class SharpMineSystem : EntitySystem
         if (TryComp<SharpStickyDartComponent>(args.OtherEntity, out _))
             return;
 
-        if (TryComp<ProjectileComponent>(args.OtherEntity, out _))
-        {
-            Detonate(mine.Owner);
-            return;
-        }
-
         if (!TryComp<DamageOnCollideComponent>(args.OtherEntity, out var damageOnCollide))
             return;
 
@@ -155,18 +149,11 @@ public sealed class SharpMineSystem : EntitySystem
             var enemyFound = false;
             foreach (var other in _nearby)
             {
-                if (other == uid || TerminatingOrDeleted(other)) continue;
-                if (!HasComp<MobStateComponent>(other)) continue;
-                if (_mobState.IsDead(other)) continue;
+                if (!CanTriggerMine(uid, other))
+                    continue;
 
-                var ev = new GetIFFFactionEvent(Content.Shared.Inventory.SlotFlags.IDCARD, new());
-                RaiseLocalEvent(other, ref ev);
-
-                if (ev.Factions.Count == 0)
-                {
-                    enemyFound = true;
-                    break;
-                }
+                enemyFound = true;
+                break;
             }
 
             if (enemyFound) _toDetonate.Add(uid);
@@ -255,5 +242,16 @@ public sealed class SharpMineSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private bool CanTriggerMine(EntityUid mineUid, EntityUid target)
+    {
+        if (target == mineUid || TerminatingOrDeleted(target))
+            return false;
+
+        if (!HasComp<MobStateComponent>(target) || _mobState.IsDead(target))
+            return false;
+
+        return HasComp<XenoComponent>(target);
     }
 }

@@ -85,14 +85,20 @@
           !type:PhysShapeAabb
           bounds: "-0.2,-0.2,0.2,0.2"
         hard: false
-        mask:
+        layer:
         - BulletImpassable
         - XenoProjectileImpassable
+      hitbox:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.2,-0.2,0.2,0.2"
+        hard: true
         layer:
         - BulletImpassable
         - XenoProjectileImpassable
   - type: Damageable
     damageContainer: Inorganic
+  - type: RequireProjectileTarget
   - type: GenericVisualizer
     visuals:
       enum.Trigger.TriggerVisuals.VisualState:
