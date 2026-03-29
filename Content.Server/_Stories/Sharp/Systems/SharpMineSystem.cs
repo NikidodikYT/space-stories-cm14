@@ -1,15 +1,23 @@
+using System;
 using System.Collections.Generic;
 using Content.Server.Explosion.EntitySystems;
+using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.OnCollide;
-using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Tools;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._Stories.Sharp;
 using Content.Shared.Damage;
+using Content.Shared.DoAfter;
 using Content.Shared.Explosion.Components;
+using Content.Shared.Inventory;
+using Content.Shared.Interaction;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Popups;
 using Content.Shared.Projectiles;
+using Content.Shared.Tools.Systems;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.GameObjects;
 using Content.Shared.Physics;
@@ -21,11 +29,16 @@ namespace Content.Server._Stories.Sharp;
 
 public sealed class SharpMineSystem : EntitySystem
 {
+    private const string SharpSpecialistPrefix = "stories-job-prefix-weapons-specialist-sharp";
+
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedToolSystem _tool = default!;
 
     private readonly HashSet<EntityUid> _nearby = new();
     private readonly List<EntityUid> _toDetonate = new();
@@ -39,6 +52,8 @@ public sealed class SharpMineSystem : EntitySystem
         SubscribeLocalEvent<SharpMineComponent, ExplosionReceivedEvent>(OnExplosionReceived);
         SubscribeLocalEvent<SharpMineComponent, StartCollideEvent>(OnMineStartCollide);
         SubscribeLocalEvent<SharpMineComponent, AttackedEvent>(OnMineAttacked);
+        SubscribeLocalEvent<SharpMineComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<SharpMineComponent, SharpMineDisarmDoAfterEvent>(OnMineDisarmDoAfter);
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectileHitMine);
     }
 
@@ -99,6 +114,56 @@ public sealed class SharpMineSystem : EntitySystem
         Detonate(mine.Owner);
     }
 
+    private void OnInteractUsing(Entity<SharpMineComponent> mine, ref InteractUsingEvent args)
+    {
+        if (args.Handled || TerminatingOrDeleted(mine.Owner) || !HasComp<MultitoolComponent>(args.Used))
+            return;
+
+        args.Handled = true;
+
+        if (!IsSharpSpecialist(args.User))
+        {
+            _popup.PopupClient(Loc.GetString("stories-sharp-mine-disarm-unauthorized"), mine, args.User, PopupType.SmallCaution);
+            return;
+        }
+
+        if (!_tool.HasQuality(args.Used, SharedToolSystem.PulseQuality))
+            return;
+
+        var doAfter = new DoAfterArgs(EntityManager,
+            args.User,
+            TimeSpan.FromSeconds(3),
+            new SharpMineDisarmDoAfterEvent(),
+            mine,
+            target: mine,
+            used: args.Used)
+        {
+            NeedHand = true,
+            BreakOnMove = true,
+            BreakOnDamage = true,
+            BreakOnHandChange = true,
+        };
+
+        _doAfter.TryStartDoAfter(doAfter);
+    }
+
+    private void OnMineDisarmDoAfter(Entity<SharpMineComponent> mine, ref SharpMineDisarmDoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled || TerminatingOrDeleted(mine.Owner))
+            return;
+
+        if (args.Used is not { } used ||
+            !HasComp<MultitoolComponent>(used) ||
+            !_tool.HasQuality(used, SharedToolSystem.PulseQuality) ||
+            !IsSharpSpecialist(args.User))
+        {
+            return;
+        }
+
+        args.Handled = true;
+        DisarmMine(mine);
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -149,7 +214,7 @@ public sealed class SharpMineSystem : EntitySystem
             var enemyFound = false;
             foreach (var other in _nearby)
             {
-                if (!CanTriggerMine(uid, other))
+                if (!CanTriggerMine((uid, mine), other))
                     continue;
 
                 enemyFound = true;
@@ -201,6 +266,14 @@ public sealed class SharpMineSystem : EntitySystem
             QueueDel(uid);
     }
 
+    private void DisarmMine(Entity<SharpMineComponent> mine)
+    {
+        if (mine.Comp.DisarmSpawnProto is { } spawnProto)
+            Spawn(spawnProto, Transform(mine).Coordinates);
+
+        QueueDel(mine);
+    }
+
     private bool TerminatingOrDeleted(EntityUid uid)
     {
         return Deleted(uid) || MetaData(uid).EntityLifeStage >= EntityLifeStage.Terminating;
@@ -244,14 +317,25 @@ public sealed class SharpMineSystem : EntitySystem
         return false;
     }
 
-    private bool CanTriggerMine(EntityUid mineUid, EntityUid target)
+    private bool CanTriggerMine(Entity<SharpMineComponent> mine, EntityUid target)
     {
-        if (target == mineUid || TerminatingOrDeleted(target))
+        if (target == mine.Owner || TerminatingOrDeleted(target))
             return false;
 
         if (!HasComp<MobStateComponent>(target) || _mobState.IsDead(target))
             return false;
 
-        return HasComp<XenoComponent>(target);
+        if (!mine.Comp.IgnoreAnyIff)
+            return true;
+
+        var ev = new GetIFFFactionEvent(SlotFlags.IDCARD, new());
+        RaiseLocalEvent(target, ref ev);
+        return ev.Factions.Count == 0;
+    }
+
+    private bool IsSharpSpecialist(EntityUid user)
+    {
+        return TryComp<JobPrefixComponent>(user, out var prefix) &&
+               prefix.AdditionalPrefix == SharpSpecialistPrefix;
     }
 }
