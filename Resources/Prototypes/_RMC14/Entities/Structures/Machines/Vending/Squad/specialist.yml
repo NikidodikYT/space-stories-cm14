@@ -121,7 +121,7 @@
       - id: RMCRocket84mm
         points: 40
     # Stories-SHARP-Start
-    - name: Магазины ШАРП
+    - name: Магазины SHARP
       entries:
       - id: STMagazineSharpRifleExplosive
         points: 40

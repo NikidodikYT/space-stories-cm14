@@ -14,13 +14,16 @@
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,21,1
+    - 0,0,15,3
   - type: StorageFill
     contents:
     - id: STWeaponSharpRifle
     - id: STMagazineSharpRifleExplosive
-    - id: STMagazineSharpRifleIncendiary
+      amount: 4
     - id: STMagazineSharpRifleFlechette
+      amount: 2
+    - id: STMagazineSharpRifleIncendiary
+      amount: 2
     - id: RMCHandsM3G4
     - id: RMCArmorM3G4
     - id: RMCArmorHelmetM3G4
@@ -28,6 +31,7 @@
     - id: CMMagazinePistolMK80
       amount: 2
     - id: RMCBinoculars
+
 - type: entity
   parent: RMCBeltBaseStorageNoVisuals
   id: STBeltSharpMagazine
@@ -35,9 +39,9 @@
   description: A specialist belt rig configured to carry SHARP magazines.
   components:
   - type: Sprite
-    sprite: _Stories/Objects/Clothing/Belts/SHARP_MAGAZINE_BELT.rsi
+    sprite: _Stories/Objects/Clothing/Belt/sharp.rsi
   - type: Clothing
-    sprite: _Stories/Objects/Clothing/Belts/SHARP_MAGAZINE_BELT.rsi
+    sprite: _Stories/Objects/Clothing/Belt/sharp.rsi
   - type: Item
     size: Large
   - type: Storage
@@ -57,8 +61,11 @@
   - type: StorageFill
     contents:
     - id: STMagazineSharpRifleExplosive
-    - id: STMagazineSharpRifleIncendiary
+      amount: 4
     - id: STMagazineSharpRifleFlechette
+      amount: 2
+    - id: STMagazineSharpRifleIncendiary
+      amount: 2
 
 - type: entity
   parent: RMCCrateAmmo
