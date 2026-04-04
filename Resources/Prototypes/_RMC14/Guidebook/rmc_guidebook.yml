@@ -368,6 +368,7 @@
   - RMCGuideRoleCrusher
   - RMCGuideRolePraetorian
   - RMCGuideRoleRavager
+  - RMCGuideRoleWarlock
   - RMCGuideRoleBoiler
 
 - type: guideEntry
@@ -387,6 +388,13 @@
   - RMCGuideRoleValkyrie
   - RMCGuideRoleOppressor
   - RMCGuideRoleVanguard
+
+- type: guideEntry
+  parent: RMC
+  id: RMCGuideRoleWarlock
+  priority: 3
+  name: "Warlock Guide"
+  text: "/ServerInfo/Guidebook/_RMC14/Guides/Xenonid/RMCGuideRoleWarlock.xml"
 
 ## Xenonid roles - T3 - Praetorian Strains
 - type: guideEntry

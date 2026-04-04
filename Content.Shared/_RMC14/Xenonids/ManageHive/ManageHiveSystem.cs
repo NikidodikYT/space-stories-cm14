@@ -244,10 +244,14 @@ public sealed class ManageHiveSystem : EntitySystem
         var choices = new List<DialogOption>();
         foreach (var boon in _hiveBoon.Boons)
         {
+            var currency = boon.Component.Currency == HiveBoonCurrency.PsyPoints
+                ? Loc.GetString("rmc-boon-currency-psy-points")
+                : Loc.GetString("rmc-boon-currency-royal-resin");
             var text = Loc.GetString("rmc-boon-name-cost",
                 ("boon", boon.Prototype.Name),
                 ("cost", boon.Component.Cost),
-                ("pylons", boon.Component.Pylons)
+                ("pylons", boon.Component.Pylons),
+                ("currency", currency)
             );
 
             var ev = new ManageHiveActivateBoonsChosenEvent(boon.Prototype.ID);
@@ -255,10 +259,18 @@ public sealed class ManageHiveSystem : EntitySystem
         }
 
         var resin = 0;
+        var psy = 0;
         if (_hive.GetHive(ent.Owner) is { } hive)
-            resin = _hiveBoon.EnsureBoons(hive).Comp.RoyalResin;
+        {
+            var boons = _hiveBoon.EnsureBoons(hive).Comp;
+            resin = boons.RoyalResin;
+            psy = boons.PsyPoints;
+        }
 
-        _dialog.OpenOptions(ent, Loc.GetString("rmc-boon-activate"), choices, Loc.GetString("rmc-boon-message", ("current", resin)));
+        _dialog.OpenOptions(ent,
+            Loc.GetString("rmc-boon-activate"),
+            choices,
+            Loc.GetString("rmc-boon-message", ("current", resin), ("psy", psy)));
     }
 
     private void OnPurchaseBoonsChosen(Entity<ManageHiveComponent> ent, ref ManageHiveActivateBoonsChosenEvent args)

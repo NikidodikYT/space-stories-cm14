@@ -53,6 +53,9 @@ CMJobXenoSpitter = Spitter
 cm-job-name-xeno-warrior = Warrior
 CMJobXenoWarrior = Warrior
 
+cm-job-name-xeno-warlock = Warlock
+CMJobXenoWarlock = Warlock
+
 rmc-job-name-xeno-king = King
 RMCJobXenoKing = King
 

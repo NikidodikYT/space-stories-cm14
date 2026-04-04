@@ -47,6 +47,54 @@
     event: !type:HiveBoonActivateKingEvent
 
 - type: entity
+  parent: RMCHiveBoonBase
+  id: RMCHiveBoonMutationChamberShell
+  name: Shell Mutation Chamber
+  description: Grows a shell mutation chamber near the hive core for warlock mutations.
+  components:
+  - type: HiveBoonDefinition
+    cost: 3
+    currency: PsyPoints
+    pylons: 0
+    duplicateId: RMCHiveBoonMutationChamberShell
+    event: !type:HiveBoonBuildMutationChamberEvent
+      chamberCategory: Shell
+      chamberPrototype: RMCHiveMutationChamberShell
+      maxCount: 3
+
+- type: entity
+  parent: RMCHiveBoonBase
+  id: RMCHiveBoonMutationChamberSpur
+  name: Spur Mutation Chamber
+  description: Grows a spur mutation chamber near the hive core for warlock mutations.
+  components:
+  - type: HiveBoonDefinition
+    cost: 3
+    currency: PsyPoints
+    pylons: 0
+    duplicateId: RMCHiveBoonMutationChamberSpur
+    event: !type:HiveBoonBuildMutationChamberEvent
+      chamberCategory: Spur
+      chamberPrototype: RMCHiveMutationChamberSpur
+      maxCount: 3
+
+- type: entity
+  parent: RMCHiveBoonBase
+  id: RMCHiveBoonMutationChamberVeil
+  name: Veil Mutation Chamber
+  description: Grows a veil mutation chamber near the hive core for warlock mutations.
+  components:
+  - type: HiveBoonDefinition
+    cost: 3
+    currency: PsyPoints
+    pylons: 0
+    duplicateId: RMCHiveBoonMutationChamberVeil
+    event: !type:HiveBoonBuildMutationChamberEvent
+      chamberCategory: Veil
+      chamberPrototype: RMCHiveMutationChamberVeil
+      maxCount: 3
+
+- type: entity
   parent: BaseHiveStructure
   id: RMCHiveCocoonKing
   name: alien cocoon

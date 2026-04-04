@@ -1,7 +1,10 @@
 ﻿rmc-boon-activate = Activate Boons
-rmc-boon-message = {$current} royal resin
-rmc-boon-name-cost = {$boon} ({$cost} resin, {$pylons} pylons)
+rmc-boon-message = {$current} royal resin, {$psy} psy points
+rmc-boon-name-cost = {$boon} ({$cost} {$currency}, {$pylons} pylons)
+rmc-boon-currency-royal-resin = resin
+rmc-boon-currency-psy-points = psy
 rmc-boon-not-enough-royal-resin = We don't have enough royal resin! We need {$cost} and have {$current}
+rmc-boon-not-enough-psy-points = We don't have enough psy points! We need {$cost} and have {$current}
 rmc-boon-not-enough-pylons = We don't have enough hive pylons! We need {$cost} and have {$current}
 rmc-boon-not-enough-time = Our hive is not mature enough yet to purchase this!
 rmc-boon-not-enough-marines = There is not enough danger to warrant hive buffs.

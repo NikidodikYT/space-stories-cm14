@@ -1571,3 +1571,39 @@
     deselectOnMiss: false
   - type: WorldTargetAction
     event: !type:XenoDestroyActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoPsychicBlast
+  name: Psychic Blast
+  description: Fire a psychic projectile. The exact effect depends on your currently selected warlock mode.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _Stories/Actions/warlock_actions.rsi
+      state: psy_blast
+    useDelay: 8
+  - type: TargetAction
+    range: 9
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoPsychicBlastActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoPsychicCrush
+  name: Psychic Crush
+  description: Begin crushing a distant area with expanding psychic pressure. Use again to release it early.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _Stories/Actions/warlock_actions.rsi
+      state: psy_crush
+    useDelay: 3
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoPsychicCrushActionEvent

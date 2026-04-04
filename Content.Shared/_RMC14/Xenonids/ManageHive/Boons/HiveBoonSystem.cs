@@ -505,11 +505,16 @@ public sealed class HiveBoonSystem : EntitySystem
             return;
 
         var boons = EnsureBoons(hive);
-        if (boons.Comp.RoyalResin < boonComp.Cost)
+        var current = boonComp.Currency == HiveBoonCurrency.PsyPoints
+            ? boons.Comp.PsyPoints
+            : boons.Comp.RoyalResin;
+        if (current < boonComp.Cost)
         {
-            var msg = Loc.GetString("rmc-boon-not-enough-royal-resin",
+            var msg = Loc.GetString(boonComp.Currency == HiveBoonCurrency.PsyPoints
+                    ? "rmc-boon-not-enough-psy-points"
+                    : "rmc-boon-not-enough-royal-resin",
                 ("cost", boonComp.Cost),
-                ("current", boons.Comp.RoyalResin));
+                ("current", current));
             _popup.PopupCursor(msg, manage, PopupType.MediumCaution);
             return;
         }
@@ -608,7 +613,10 @@ public sealed class HiveBoonSystem : EntitySystem
             return;
 
         boons.Comp.UsedAt[boonProto.ID] = time;
-        boons.Comp.RoyalResin = Math.Max(0, boons.Comp.RoyalResin - boonComp.Cost);
+        if (boonComp.Currency == HiveBoonCurrency.PsyPoints)
+            boons.Comp.PsyPoints = Math.Max(0, boons.Comp.PsyPoints - boonComp.Cost);
+        else
+            boons.Comp.RoyalResin = Math.Max(0, boons.Comp.RoyalResin - boonComp.Cost);
 
         var boonEnt = Spawn(boonProto.ID, MapCoordinates.Nullspace);
         _hive.SetSameHive(manage.Owner, boonEnt);
@@ -619,6 +627,7 @@ public sealed class HiveBoonSystem : EntitySystem
         Dirty(boons, boons.Comp);
 
         ev.Boon = boonEnt;
+        ev.Performer = manage.Owner;
         ev.Hive = hive;
         ev.Core = _hive.GetHiveCore(hive);
         RaiseLocalEvent((object) ev);

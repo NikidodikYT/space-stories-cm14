@@ -1,0 +1,110 @@
+- type: entity
+  parent: BaseHiveStructure
+  id: RMCHiveMutationChamberBase
+  abstract: true
+  name: mutation chamber
+  description: A resin pod that deepens a warlock's psychic adaptation.
+  components:
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        layer:
+        - BulletImpassable
+        density: 200
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 450
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: RepairableXenoStructure
+    plasmaCost: 300
+    repairLength: 3
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 40
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pylon
+
+- type: entity
+  parent: RMCHiveMutationChamberBase
+  id: RMCHiveMutationChamberShell
+  name: shell mutation chamber
+  components:
+  - type: Sprite
+    sprite: _Stories/Structures/Xenos/hive_structures.rsi
+    state: recovery
+  - type: XenoMutationChamber
+    category: Shell
+  - type: HiveConstructionLimited
+    id: RMCHiveMutationChamberShell
+
+- type: entity
+  parent: RMCHiveMutationChamberBase
+  id: RMCHiveMutationChamberSpur
+  name: spur mutation chamber
+  components:
+  - type: Sprite
+    sprite: _Stories/Structures/Xenos/hive_structures.rsi
+    state: evopod
+  - type: XenoMutationChamber
+    category: Spur
+  - type: HiveConstructionLimited
+    id: RMCHiveMutationChamberSpur
+
+- type: entity
+  parent: RMCHiveMutationChamberBase
+  id: RMCHiveMutationChamberVeil
+  name: veil mutation chamber
+  components:
+  - type: Sprite
+    sprite: _Stories/Structures/Xenos/hive_structures.rsi
+    state: pylon_active
+  - type: XenoMutationChamber
+    category: Veil
+  - type: HiveConstructionLimited
+    id: RMCHiveMutationChamberVeil
+
+- type: entity
+  id: XenoWarlockPsychicShield
+  name: psychic shield
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      barrier:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.9,0.25,0.9"
+        layer:
+        - BulletImpassable
+        density: 50
+  - type: Sprite
+    sprite: _Stories/Effects/warlock_shield.rsi
+    state: shield
+  - type: Damageable
+    damageContainer: StructuralXeno
+    damageModifierSet: Resin
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 160
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: RequireProjectileTarget
+  - type: XenoWarlockShield

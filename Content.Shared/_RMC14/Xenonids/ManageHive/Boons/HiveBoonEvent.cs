@@ -13,6 +13,9 @@ public partial class HiveBoonEvent
     public EntityUid Boon;
 
     [NonSerialized]
+    public EntityUid Performer;
+
+    [NonSerialized]
     public Entity<HiveComponent> Hive;
 
     [NonSerialized]

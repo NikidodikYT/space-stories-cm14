@@ -1,0 +1,21 @@
+<Document>
+  <GuideEntityEmbed Entity="CMXenoWarlock"/>
+
+  ## Warlock
+
+  The Warlock is a tier three psychic caste focused on ranged disruption, corpse harvesting, and battlefield control.
+
+  ## Core Abilities
+  - Psychic Blast: your baseline ranged psychic burst.
+  - Psychic Crush: creates a growing crushing field which can be released early.
+  - Psychic Shield: raises a directional barrier that can be detonated in front of you.
+  - Psy Drain: harvest a dead humanoid body for hive psy points and larva pressure.
+
+  ## Mutation Chambers
+  - Shell chambers unlock Cautious Mind.
+  - Spur chambers unlock Draining Blast.
+  - Veil chambers unlock Mobile Mind.
+
+  ## Primordial
+  After maturing, the Warlock becomes Primordial and gains access to Psychic Lance through its blast mode selector.
+</Document>

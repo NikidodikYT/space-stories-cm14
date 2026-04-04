@@ -1,0 +1,109 @@
+- type: entity
+  parent:
+  - CMXenoDeveloped
+  - CMXenoTail
+  - CMXenoFlammable
+  - RMCXenoSpeechSounds
+  - RMCXenoCommendationReceiver
+  - RMCXenoMobCollision
+  id: CMXenoWarlock
+  name: Warlock
+  description: A psychic xenomorph that twists the battlefield with crushing telekinetic force.
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleWarlock
+  - type: GhostRole
+    name: cm-job-name-xeno-warlock
+  - type: Sprite
+    sprite: _Stories/Mobs/Xenos/Warlock/warlock.rsi
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      525: Critical
+      650: Dead
+  - type: Xeno
+    role: CMXenoWarlock
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTransferPlasma
+    - ActionXenoPsyDrain
+    - ActionXenoPsychicBlast
+    - ActionXenoPsychicCrush
+    - ActionXenoPsychicShield
+    - ActionXenoWarlockMutations
+    - ActionXenoWarlockToggleBlastMode
+    - ActionXenoDevolve
+    tier: 3
+    unlockAt: 900
+    hudOffset: 0,0.16
+  - type: XenoWarlock
+  - type: XenoRegen
+    restHealMultiplier: 1.15
+  - type: XenoLight
+  - type: XenoDevolve
+    devolvesTo:
+    - CMXenoWarrior
+  - type: XenoDevour
+  - type: XenoPlasma
+    plasma: 900
+    maxPlasma: 900
+    plasmaRegenOnWeeds: 3
+  - type: CMArmor
+    xenoArmor: 15
+    explosionArmor: 30
+  - type: XenoClaws
+    clawType: Sharp
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 32
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 42
+  - type: Tackle
+    chance: 0.3
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.1
+    baseSprintSpeed: 3.25
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.52
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.58
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.39
+      whitelist:
+        components:
+        - XenoHeavy
+  - type: RMCSize
+    size: Big
+  - type: RMCXenoDamageVisuals
+    prefix: warlock
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: praetorian
+  - type: FixedIdentity
+    name: cm-job-name-xeno-warlock
+  - type: RMCSurgeryXenoHeart
+    item: RMCOrganXenoHeartT3
+  - type: RMCActionOrder
+    id: CMXenoWarlock
+  - type: XenoMaturing
+    critThreshold: 525
+    deadThreshold: 650
+    addComponents:
+    - type: XenoWarlockPrimordial

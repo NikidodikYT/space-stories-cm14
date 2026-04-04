@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Taken from tgstation/TerraGov-Marine-Corps icons/Xeno/actions/warlock.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "psy_blast"
+    },
+    {
+      "name": "psy_lance"
+    },
+    {
+      "name": "psy_crush"
+    },
+    {
+      "name": "psy_crush_activate"
+    },
+    {
+      "name": "psy_shield"
+    },
+    {
+      "name": "psy_shield_reflect"
+    }
+  ]
+}

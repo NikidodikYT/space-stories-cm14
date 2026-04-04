@@ -23,6 +23,7 @@
     - CMXenoRunner
     - CMXenoSentinel
     - CMXenoSpitter
+    - CMXenoWarlock
     - CMXenoWarrior
 
 - type: entity
@@ -52,3 +53,4 @@
     - CMXenoCrusher
     - CMXenoPraetorian
     - CMXenoRavager
+    - CMXenoWarlock

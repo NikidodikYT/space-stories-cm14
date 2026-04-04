@@ -487,3 +487,51 @@
   components:
     - type: Sprite
       state: lay_egg
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoPsychicShield
+  name: Psychic Shield
+  description: Raise a directed psychic barrier. Activating it again detonates the shield in front of you.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _Stories/Actions/warlock_actions.rsi
+      state: psy_shield
+    useDelay: 10
+  - type: TargetAction
+    range: 9
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoPsychicShieldActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoWarlockMutations
+  name: Warlock Mutations
+  description: Review your mutation chambers, choose mutations, and select your psychic blast mode.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _Stories/Actions/warlock_actions.rsi
+      state: psy_shield_reflect
+    useDelay: 1
+  - type: InstantAction
+    event: !type:XenoWarlockMutationsActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoWarlockToggleBlastMode
+  name: Cycle Blast Mode
+  description: Cycle between available warlock blast modes.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _Stories/Actions/warlock_actions.rsi
+      state: psy_lance
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:XenoWarlockToggleBlastModeActionEvent

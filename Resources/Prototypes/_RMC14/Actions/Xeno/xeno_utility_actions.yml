@@ -430,3 +430,20 @@
     event: !type:XenoDoomActionEvent
   - type: XenoActionPlasma
     cost: 50
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoPsyDrain
+  name: Psy Drain
+  description: Channel on a dead human to harvest psychic residue for the hive.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _Stories/Actions/warlock_actions.rsi
+      state: psy_blast
+    useDelay: 2
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    event: !type:XenoPsyDrainActionEvent

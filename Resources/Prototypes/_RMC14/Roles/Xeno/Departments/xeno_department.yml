@@ -24,6 +24,7 @@
   - CMXenoRunner
   - CMXenoSentinel
   - CMXenoSpitter
+  - CMXenoWarlock
   - CMXenoWarrior
   - CMXenoSelectableXeno
   departmentRadio: Hivemind # Unlikely to ever be used, just for completeness

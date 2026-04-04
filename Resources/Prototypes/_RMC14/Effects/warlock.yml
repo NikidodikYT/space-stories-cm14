@@ -1,0 +1,81 @@
+- type: entity
+  parent: RMCBaseEffect
+  id: RMCEffectWarlockBlastCharge
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 1
+  - type: Sprite
+    sprite: _Stories/Effects/warlock_crush.rsi
+    state: orb_charge
+    drawdepth: Effects
+    color: "#970f0f"
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: RMCBaseEffect
+  id: RMCEffectWarlockCrushWarning
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 8
+  - type: Sprite
+    sprite: _Stories/Effects/warlock_crush.rsi
+    state: crush_warning
+    noRot: true
+    drawdepth: Effects
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: RMCBaseEffect
+  id: RMCEffectWarlockCrushOrb
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 8
+  - type: Sprite
+    sprite: _Stories/Effects/warlock_crush.rsi
+    state: orb_idle
+    drawdepth: Effects
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: RMCBaseEffect
+  id: RMCEffectWarlockCrushHard
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.5
+  - type: Sprite
+    sprite: _Stories/Effects/warlock_crush.rsi
+    state: crush_hard
+    drawdepth: Effects
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: RMCBaseEffect
+  id: RMCEffectWarlockCrushSmooth
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.6
+  - type: Sprite
+    sprite: _Stories/Effects/warlock_crush.rsi
+    state: crush_smooth
+    drawdepth: Effects
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
