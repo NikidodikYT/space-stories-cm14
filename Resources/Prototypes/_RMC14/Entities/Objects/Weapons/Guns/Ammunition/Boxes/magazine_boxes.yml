@@ -340,36 +340,48 @@
           High: { state: supply_ammo_small_high, visible: true }
           Full: { state: supply_ammo_small_full, visible: true }
 
+# Stories-start
 # -- RIFLE BOXES --
 
-# M54C REG
+# M41A FAMILY BASE
 - type: entity
+  abstract: true
   parent: RMCBoxMagazineRifleBase
-  id: RMCBoxMagazineRifleM54CEmpty
-  name: magazine box (M54C x 10)
+  id: CMBoxMagazineRifleM41AFamilyBase
+  components:
+  - type: Sprite
+    sprite: _Stories/Objects/Weapons/Guns/Ammunition/Boxes/m41a_boxes.rsi
+    layers:
+    - state: base_m41
+    - state: magaz_reg
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: text_m41
+    - state: base_m41_lid
+      map: [ "lid" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMItemSlotsLayers.Fill:
+        enum.CMItemSlotsLayers.Fill:
+          Empty: { state: magaz_reg, visible: false }
+          Low: { state: magaz_reg_1, visible: true }
+          Medium: { state: magaz_reg_2, visible: true }
+          High: { state: magaz_reg_3, visible: true }
+          Full: { state: magaz_reg, visible: true }
+
+# M41A REG
+- type: entity
+  parent: CMBoxMagazineRifleM41AFamilyBase
+  id: CMBoxMagazineRifleM41AEmpty
+  name: magazine box (M41A x 10)
+  description: A box of M41A magazines.
   components:
   - type: Construction
     graph: RMCBoxMagazine
-    node: RMCBoxMagazineRifleM54CEmpty
-  - type: Sprite
-    layers:
-    - state: rifle_box
-      color: "#7b8246"
-    - state: rifle_ammo_full_mags_base
-      map: [ "enum.CMItemSlotsLayers.Fill" ]
-    - state: rifle_ammo_full_mags_color
-      map: [ "enum.CMItemSlotsLayers2.Fill" ]
-      color: "#ffc000"
-    - state: rifle_box_54
-      color: "#ffcb26"
-    - state: rifle_box_marking
-      color: "#7c4c1b"
-    - state: rifle_lid
-      map: [ "lid" ]
-      color: "#7b8246"
-    - state: rifle_lid_marking
-      map: [ "lid_marking" ]
-      color: "#7c4c1b"
+    node: CMBoxMagazineRifleM41AEmpty
   - type: CMItemSlots
     count: 10
     slot:
@@ -378,8 +390,8 @@
         - CMMagazineRifleM54C
 
 - type: entity
-  parent: RMCBoxMagazineRifleM54CEmpty
-  id: RMCBoxMagazineRifleM54C
+  parent: CMBoxMagazineRifleM41AEmpty
+  id: CMBoxMagazineRifleM41A
   suffix: Full
   components:
   - type: CMItemSlots
@@ -390,34 +402,16 @@
         tags:
         - CMMagazineRifleM54C
 
-# M54C AP
+# M41A AP
 - type: entity
-  parent: RMCBoxMagazineRifleBase
-  id: RMCBoxMagazineRifleM54CAPEmpty
-  name: magazine box (AP M54C x 10)
+  parent: CMBoxMagazineRifleM41AFamilyBase
+  id: CMBoxMagazineRifleM41AAPEmpty
+  name: magazine box (M41A AP x 10)
+  description: A box of M41A armor-piercing magazines.
   components:
   - type: Construction
     graph: RMCBoxMagazine
-    node: RMCBoxMagazineRifleM54CAPEmpty
-  - type: Sprite
-    layers:
-    - state: rifle_box
-      color: "#7b8246"
-    - state: rifle_ammo_full_mags_base
-      map: [ "enum.CMItemSlotsLayers.Fill" ]
-    - state: rifle_ammo_full_mags_color
-      map: [ "enum.CMItemSlotsLayers2.Fill" ]
-      color: "#318b11"
-    - state: rifle_box_54
-      color: "#ffcb26"
-    - state: rifle_box_marking
-      color: "#318b11"
-    - state: rifle_lid
-      map: [ "lid" ]
-      color: "#7b8246"
-    - state: rifle_lid_marking
-      map: [ "lid_marking" ]
-      color: "#318b11"
+    node: CMBoxMagazineRifleM41AAPEmpty
   - type: CMItemSlots
     count: 10
     slot:
@@ -426,8 +420,8 @@
         - CMMagazineRifleM54CAP
 
 - type: entity
-  parent: RMCBoxMagazineRifleM54CAPEmpty
-  id: RMCBoxMagazineRifleM54CAP
+  parent: CMBoxMagazineRifleM41AAPEmpty
+  id: CMBoxMagazineRifleM41AAP
   suffix: Full
   components:
   - type: CMItemSlots
@@ -438,34 +432,26 @@
         tags:
         - CMMagazineRifleM54CAP
 
-# M54C EXT
+# M41A EXT
 - type: entity
-  parent: RMCBoxMagazineRifleBase
-  id: RMCBoxMagazineRifleM54CExtEmpty
-  name: magazine box (Ext M54C x 8)
+  parent: CMBoxMagazineRifleM41AFamilyBase
+  id: CMBoxMagazineRifleM41AExtEmpty
+  name: magazine box (M41A extended x 8)
+  description: A box of extended M41A magazines.
   components:
   - type: Construction
     graph: RMCBoxMagazine
-    node: RMCBoxMagazineRifleM54CExtEmpty
+    node: CMBoxMagazineRifleM41AExtEmpty
   - type: Sprite
+    sprite: _Stories/Objects/Weapons/Guns/Ammunition/Boxes/m41a_boxes.rsi
     layers:
-    - state: rifle_box
-      color: "#7b8246"
-    - state: rifle_ammo_full_mags_base
+    - state: base_m41
+    - state: magaz_reg
       map: [ "enum.CMItemSlotsLayers.Fill" ]
-    - state: rifle_ammo_full_mags_color
-      map: [ "enum.CMItemSlotsLayers2.Fill" ]
-      color: "#ffcb26"
-    - state: rifle_box_54
-      color: "#ffcb26"
-    - state: rifle_box_marking
-      color: "#ffcb26"
-    - state: rifle_lid
+    - state: text_m41
+    - state: base_type_ext
+    - state: base_m41_lid
       map: [ "lid" ]
-      color: "#7b8246"
-    - state: rifle_lid_marking
-      map: [ "lid_marking" ]
-      color: "#ffcb26"
   - type: CMItemSlots
     count: 8
     slot:
@@ -474,8 +460,8 @@
         - CMMagazineRifleM54CExt
 
 - type: entity
-  parent: RMCBoxMagazineRifleM54CExtEmpty
-  id: RMCBoxMagazineRifleM54CExt
+  parent: CMBoxMagazineRifleM41AExtEmpty
+  id: CMBoxMagazineRifleM41AExt
   suffix: Full
   components:
   - type: CMItemSlots
@@ -485,6 +471,8 @@
       whitelist:
         tags:
         - CMMagazineRifleM54CExt
+
+# Stories-end
 
 # M4SPR REG
 - type: entity
@@ -908,7 +896,7 @@
   components:
 #  - type: Construction
 #    graph: RMCBoxMagazine
-#    node: RMCBoxMagazineRifleM54CEmpty #TODO: Construction node needed.
+#    node: CMBoxMagazineRifleM41AEmpty #TODO: Construction node needed.
   - type: Sprite
     layers:
     - state: rifle_box
@@ -956,7 +944,7 @@
   components:
 #  - type: Construction
 #    graph: RMCBoxMagazine
-#    node: RMCBoxMagazineRifleM54CAPEmpty #TODO: Construction node needed.
+#    node: CMBoxMagazineRifleM41AAPEmpty #TODO: Construction node needed.
   - type: Sprite
     layers:
     - state: rifle_box
@@ -1004,7 +992,7 @@
   components:
 #  - type: Construction
 #    graph: RMCBoxMagazine
-#    node: RMCBoxMagazineRifleM54CExtEmpty TODO: Construction node needed.
+#    node: CMBoxMagazineRifleM41AExtEmpty TODO: Construction node needed.
   - type: Sprite
     layers:
     - state: rifle_box

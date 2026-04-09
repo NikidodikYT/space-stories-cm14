@@ -125,7 +125,7 @@
         box: CMMagazineRifleM4SPR
         boxSlots: 24 # 600 / 25
       - id: RMCBoxBulletsRifle
-        name: rifle ammunition box (10x24mm) (M54C)
+        name: rifle ammunition box (10x24mm) (M41A)
         box: CMMagazineRifleM54C
         boxSlots: 15 # 600 / 40
       - id: RMCBoxBulletsSMG
@@ -138,9 +138,11 @@
       - id: RMCBoxMagazineRifleM4SPR
         name: Magazine Box (M4SPR x 16)
         box: CMMagazineRifleM4SPR
-      - id: RMCBoxMagazineRifleM54C
-        name: Magazine Box (M54C x 10)
+      # Stories-start
+      - id: CMBoxMagazineRifleM41A
+        name: Magazine Box (M41A x 10)
         box: CMMagazineRifleM54C
+      # Stories-end
       - id: RMCBoxMagazineSMGM63
         name: Magazine Box (M63 x 12)
         box: CMMagazineSMGM63

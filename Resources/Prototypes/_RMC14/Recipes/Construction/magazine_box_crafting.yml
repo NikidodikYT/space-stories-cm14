@@ -1,41 +1,43 @@
 # construction ui entries
 
-# M54C
+# Stories-start
+# M41A
 - type: construction
   parent: RMC
-  name: Magazine Box (M54C Reg)
-  id: RMCBoxMagazineRifleM54C
+  name: Magazine Box (M41A)
+  id: CMBoxMagazineRifleM41A
   graph: RMCBoxMagazine
   startNode: start
-  targetNode: RMCBoxMagazineRifleM54CEmpty
+  targetNode: CMBoxMagazineRifleM41AEmpty
   category: construction-category-cm-box-magazine
-  description: A magazine box that can contain regular M54C mags.
+  description: A magazine box that can contain regular M41A magazines.
   iconColor: "#7b8246"
   objectType: Item
 
 - type: construction
   parent: RMC
-  name: Magazine Box (M54C AP)
-  id: RMCBoxMagazineRifleM54CAP
+  name: Magazine Box (M41A AP)
+  id: CMBoxMagazineRifleM41AAP
   graph: RMCBoxMagazine
   startNode: start
-  targetNode: RMCBoxMagazineRifleM54CAPEmpty
+  targetNode: CMBoxMagazineRifleM41AAPEmpty
   category: construction-category-cm-box-magazine
-  description: A magazine box that can contain armor piercing M54C mags.
+  description: A magazine box that can contain M41A armor-piercing magazines.
   iconColor: "#7b8246"
   objectType: Item
 
 - type: construction
   parent: RMC
-  name: Magazine Box (M54C Ext)
-  id: RMCBoxMagazineRifleM54CExt
+  name: Magazine Box (M41A Extended)
+  id: CMBoxMagazineRifleM41AExt
   graph: RMCBoxMagazine
   startNode: start
-  targetNode: RMCBoxMagazineRifleM54CExtEmpty
+  targetNode: CMBoxMagazineRifleM41AExtEmpty
   category: construction-category-cm-box-magazine
-  description: A magazine box that can contain extended M54C mags.
+  description: A magazine box that can contain extended M41A magazines.
   iconColor: "#7b8246"
   objectType: Item
+# Stories-end
 
 - type: construction
   parent: RMC
@@ -540,22 +542,24 @@
   - node: start
     edges:
 
-    # M54C
-    - to: RMCBoxMagazineRifleM54CEmpty
+    # Stories-start
+    # M41A
+    - to: CMBoxMagazineRifleM41AEmpty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
-    - to: RMCBoxMagazineRifleM54CAPEmpty
+    - to: CMBoxMagazineRifleM41AAPEmpty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
-    - to: RMCBoxMagazineRifleM54CExtEmpty
+    - to: CMBoxMagazineRifleM41AExtEmpty
       steps:
       - material: RMCSheetCardboard
         amount: 1
         doAfter: 0.25
+    # Stories-end
     - to: RMCBoxBulletsRifleEmpty
       steps:
       - material: RMCSheetCardboard
@@ -829,13 +833,15 @@
 
   # Why the fuck do you even need these nodes???
 
-  # M54C
-  - node: RMCBoxMagazineRifleM54CEmpty
-    entity: RMCBoxMagazineRifleM54CEmpty
-  - node: RMCBoxMagazineRifleM54CAPEmpty
-    entity: RMCBoxMagazineRifleM54CAPEmpty
-  - node: RMCBoxMagazineRifleM54CExtEmpty
-    entity: RMCBoxMagazineRifleM54CExtEmpty
+  # Stories-start
+  # M41A
+  - node: CMBoxMagazineRifleM41AEmpty
+    entity: CMBoxMagazineRifleM41AEmpty
+  - node: CMBoxMagazineRifleM41AAPEmpty
+    entity: CMBoxMagazineRifleM41AAPEmpty
+  - node: CMBoxMagazineRifleM41AExtEmpty
+    entity: CMBoxMagazineRifleM41AExtEmpty
+  # Stories-end
   - node: RMCBoxBulletsRifleEmpty
     entity: RMCBoxBulletsRifleEmpty
   - node: RMCBoxBulletsRifleAPEmpty

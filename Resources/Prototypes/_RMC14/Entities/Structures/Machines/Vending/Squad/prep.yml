@@ -102,8 +102,10 @@
         box: CMMagazineRifleM4SPR
       - id: RMCBoxMagazineSMGM63
         box: CMMagazineSMGM63
-      - id: RMCBoxMagazineRifleM54C
+      # Stories-start
+      - id: CMBoxMagazineRifleM41A
         box: CMMagazineRifleM54C
+      # Stories-end
       - id: RMCBoxMagazinePistolM77AP
         box: CMMagazinePistolM77AP
       - id: RMCBoxMagazineRevolverM44
@@ -127,7 +129,7 @@
         box: CMMagazineSMGM63
         boxSlots: 13 # 600 / 48, yes we lose half a mag to the void
       - id: RMCBoxBulletsRifle
-        name: rifle ammunition box (10x24mm) (M54C)
+        name: rifle ammunition box (10x24mm) (M41A)
         box: CMMagazineRifleM54C
         boxSlots: 15 # 600 / 40
     - name: Other Boxes

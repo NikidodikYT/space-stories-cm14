@@ -124,9 +124,9 @@ Requisitions are tapped. Vendors are dry. Time to relocate to the Squad Preparat
 <Box>
   <GuideEntityEmbed Entity="ColMarTechEquipment" Caption="Weapons rack"/>
 </Box>
-Now the ammunition is dispensed—let's get to packing, Technician. Let's make a box. Press ([color=yellow][keybind="g"][/color]) to open the build menu and use the search bar to find the boxes you will craft. There are three basic boxes you will pack: M54C, SPR, and M63. Press ([color=yellow][keybind="z"][/color]) to place it down, open it, and ([color=yellow][keybind="alt left click"][/color]) to pick it up. Now simply ([color=yellow][keybind="left click"][/color]) on the boxes with a magazine in hand to pack.
+Now the ammunition is dispensed—let's get to packing, Technician. Let's make a box. Press ([color=yellow][keybind="g"][/color]) to open the build menu and use the search bar to find the boxes you will craft. There are three basic boxes you will pack: M41A, SPR, and M63. Press ([color=yellow][keybind="z"][/color]) to place it down, open it, and ([color=yellow][keybind="alt left click"][/color]) to pick it up. Now simply ([color=yellow][keybind="left click"][/color]) on the boxes with a magazine in hand to pack.
 <Box>
-  <GuideEntityEmbed Entity="RMCBoxMagazineRifleM54C" Caption="M54C regular"/>
+  <GuideEntityEmbed Entity="CMBoxMagazineRifleM41A" Caption="M41A regular"/>
   <GuideEntityEmbed Entity="RMCBoxMagazineRifleM4SPR" Caption="M4SPR regular"/>
   <GuideEntityEmbed Entity="RMCBoxMagazineSMGM63" Caption="M63 regular"/>
 </Box>

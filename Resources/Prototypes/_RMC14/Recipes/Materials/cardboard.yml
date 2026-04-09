@@ -129,15 +129,16 @@
   name: pistol ammunition box (10x20mm-APC (AP))
   prototype: RMCBoxBulletsPistolAPEmpty
 
+# Stories-start
 # empty rifle magazine boxes
 - type: rmcConstruction
   id: RMCEmptyRifleMagazineBoxesList
   name: rifle magazine boxes (1 cardboard) # cost named manually since lists won't name costs otherwise
   prototype: RMCBoxMagazineRifleBase
   listed:
-  - RMCBoxMagazineRifleM54CEmptyBuild
-  - RMCBoxMagazineRifleM54CAPEmptyBuild
-  - RMCBoxMagazineRifleM54CExtEmptyBuild
+  - CMBoxMagazineRifleM41AEmptyBuild
+  - CMBoxMagazineRifleM41AAPEmptyBuild
+  - CMBoxMagazineRifleM41AExtEmptyBuild
   - RMCDividerConstruction
   - RMCBoxMagazineRifleM4SPREmptyBuild
   - RMCBoxMagazineRifleM4SPRAPEmptyBuild
@@ -150,21 +151,22 @@
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
-  id: RMCBoxMagazineRifleM54CEmptyBuild
-  name: M54C magazine box
-  prototype: RMCBoxMagazineRifleM54CEmpty
+  id: CMBoxMagazineRifleM41AEmptyBuild
+  name: M41A magazine box
+  prototype: CMBoxMagazineRifleM41AEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
-  id: RMCBoxMagazineRifleM54CAPEmptyBuild
-  name: M54C magazine box (AP)
-  prototype: RMCBoxMagazineRifleM54CAPEmpty
+  id: CMBoxMagazineRifleM41AAPEmptyBuild
+  name: M41A magazine box (AP)
+  prototype: CMBoxMagazineRifleM41AAPEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
-  id: RMCBoxMagazineRifleM54CExtEmptyBuild
-  name: M54C magazine box (Ext)
-  prototype: RMCBoxMagazineRifleM54CExtEmpty
+  id: CMBoxMagazineRifleM41AExtEmptyBuild
+  name: M41A magazine box (Ext)
+  prototype: CMBoxMagazineRifleM41AExtEmpty
+# Stories-end
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
