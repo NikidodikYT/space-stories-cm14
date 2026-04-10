@@ -342,34 +342,43 @@
 
 # -- RIFLE BOXES --
 
+- type: entity
+  abstract: true
+  parent: RMCBoxMagazineRifleBase
+  id: RMCBoxMagazineRifleM54CM41ASpriteBase
+  components:
+  - type: Sprite
+    sprite: _Stories/Objects/Weapons/Guns/Ammunition/Boxes/m41a_boxes.rsi
+    layers:
+    - state: base_m41
+    - state: magaz_reg
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: text_m41
+    - state: base_m41_lid
+      map: [ "lid" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMItemSlotsLayers.Fill:
+        enum.CMItemSlotsLayers.Fill:
+          Empty: { state: magaz_reg, visible: false }
+          Low: { state: magaz_reg_1, visible: true }
+          Medium: { state: magaz_reg_2, visible: true }
+          High: { state: magaz_reg_3, visible: true }
+          Full: { state: magaz_reg, visible: true }
+
 # M54C REG
 - type: entity
-  parent: RMCBoxMagazineRifleBase
+  parent: RMCBoxMagazineRifleM54CM41ASpriteBase
   id: RMCBoxMagazineRifleM54CEmpty
   name: magazine box (M54C x 10)
   components:
   - type: Construction
     graph: RMCBoxMagazine
     node: RMCBoxMagazineRifleM54CEmpty
-  - type: Sprite
-    layers:
-    - state: rifle_box
-      color: "#7b8246"
-    - state: rifle_ammo_full_mags_base
-      map: [ "enum.CMItemSlotsLayers.Fill" ]
-    - state: rifle_ammo_full_mags_color
-      map: [ "enum.CMItemSlotsLayers2.Fill" ]
-      color: "#ffc000"
-    - state: rifle_box_54
-      color: "#ffcb26"
-    - state: rifle_box_marking
-      color: "#7c4c1b"
-    - state: rifle_lid
-      map: [ "lid" ]
-      color: "#7b8246"
-    - state: rifle_lid_marking
-      map: [ "lid_marking" ]
-      color: "#7c4c1b"
   - type: CMItemSlots
     count: 10
     slot:
@@ -392,32 +401,13 @@
 
 # M54C AP
 - type: entity
-  parent: RMCBoxMagazineRifleBase
+  parent: RMCBoxMagazineRifleM54CM41ASpriteBase
   id: RMCBoxMagazineRifleM54CAPEmpty
   name: magazine box (AP M54C x 10)
   components:
   - type: Construction
     graph: RMCBoxMagazine
     node: RMCBoxMagazineRifleM54CAPEmpty
-  - type: Sprite
-    layers:
-    - state: rifle_box
-      color: "#7b8246"
-    - state: rifle_ammo_full_mags_base
-      map: [ "enum.CMItemSlotsLayers.Fill" ]
-    - state: rifle_ammo_full_mags_color
-      map: [ "enum.CMItemSlotsLayers2.Fill" ]
-      color: "#318b11"
-    - state: rifle_box_54
-      color: "#ffcb26"
-    - state: rifle_box_marking
-      color: "#318b11"
-    - state: rifle_lid
-      map: [ "lid" ]
-      color: "#7b8246"
-    - state: rifle_lid_marking
-      map: [ "lid_marking" ]
-      color: "#318b11"
   - type: CMItemSlots
     count: 10
     slot:
@@ -440,7 +430,7 @@
 
 # M54C EXT
 - type: entity
-  parent: RMCBoxMagazineRifleBase
+  parent: RMCBoxMagazineRifleM54CM41ASpriteBase
   id: RMCBoxMagazineRifleM54CExtEmpty
   name: magazine box (Ext M54C x 8)
   components:
@@ -448,24 +438,15 @@
     graph: RMCBoxMagazine
     node: RMCBoxMagazineRifleM54CExtEmpty
   - type: Sprite
+    sprite: _Stories/Objects/Weapons/Guns/Ammunition/Boxes/m41a_boxes.rsi
     layers:
-    - state: rifle_box
-      color: "#7b8246"
-    - state: rifle_ammo_full_mags_base
+    - state: base_m41
+    - state: magaz_reg
       map: [ "enum.CMItemSlotsLayers.Fill" ]
-    - state: rifle_ammo_full_mags_color
-      map: [ "enum.CMItemSlotsLayers2.Fill" ]
-      color: "#ffcb26"
-    - state: rifle_box_54
-      color: "#ffcb26"
-    - state: rifle_box_marking
-      color: "#ffcb26"
-    - state: rifle_lid
+    - state: text_m41
+    - state: base_type_ext
+    - state: base_m41_lid
       map: [ "lid" ]
-      color: "#7b8246"
-    - state: rifle_lid_marking
-      map: [ "lid_marking" ]
-      color: "#ffcb26"
   - type: CMItemSlots
     count: 8
     slot:
