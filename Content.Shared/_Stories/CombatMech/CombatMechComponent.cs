@@ -208,17 +208,6 @@ public sealed partial class CombatMechComponent : Component
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true)]
-[Access(typeof(CombatMechSystem))]
-public sealed partial class CombatMechPilotVisualsComponent : Component
-{
-    [AutoNetworkedField]
-    public int RenderOrder;
-
-    [AutoNetworkedField]
-    public Vector2 Offset;
-}
-
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true)]
 public sealed partial class CombatMechWeaponComponent : Component
 {
     [DataField]
@@ -237,16 +226,6 @@ public sealed partial class CombatMechWeaponComponent : Component
 
 [RegisterComponent]
 public sealed partial class CombatMechUnderbarrelComponent : Component;
-
-[RegisterComponent]
-public sealed partial class CombatMechMeleeDamageMultiplierComponent : Component
-{
-    [DataField(required: true)]
-    public float Multiplier = 1f;
-}
-
-[RegisterComponent]
-public sealed partial class CombatMechBumpDamageableComponent : Component;
 
 // Not [NetworkedComponent]: fields are static container-ID strings; actual fuel state is
 // tracked through SolutionContainerManager (which is networked) on the tank entity.
@@ -379,6 +358,11 @@ public sealed partial class CombatMechDetachWeaponDoAfterEvent : SimpleDoAfterEv
     public bool Primary;
 
     public override DoAfterEvent Clone() => new CombatMechDetachWeaponDoAfterEvent { Primary = Primary };
+
+    public override bool IsDuplicate(DoAfterEvent other)
+    {
+        return other is CombatMechDetachWeaponDoAfterEvent detach && detach.Primary == Primary;
+    }
 }
 
 [Serializable, NetSerializable]

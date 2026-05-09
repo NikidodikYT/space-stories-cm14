@@ -56,9 +56,9 @@ public sealed class CombatMechFlamerInputSystem : EntitySystem
         if (mousePos.MapId == MapId.Nullspace)
             return;
 
-        // Match the normal gun input path: target coordinates are relative to the moving
-        // shooter, so shots don't drift when the mech is walking on a moving parent.
-        var coordinates = _transform.ToCoordinates(pilot, mousePos);
+        // Keep target coordinates relative to the mech itself so firing stays stable on
+        // moving grids even when the hidden pilot's predicted transform is a tick behind.
+        var coordinates = _transform.ToCoordinates(inside.Vehicle, mousePos);
 
         NetEntity? target = null;
         if (_state.CurrentState is GameplayStateBase screen)

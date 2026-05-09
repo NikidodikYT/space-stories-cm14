@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared._RMC14.Sprite;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Camera;
@@ -104,36 +105,15 @@ public sealed partial class CombatMechSystem
     {
         var pilot = args.Buckle.Owner;
 
-        ent.Comp.PilotEntity = null;
-        DirtyField(ent.Owner, ent.Comp, nameof(CombatMechComponent.PilotEntity));
-
-        if (TryComp(pilot, out InsideCombatVehicleComponent? inside))
-        {
-            RestorePilotProtection((pilot, inside));
-            RestorePilotVisuals((pilot, inside));
-        }
-        else
-        {
-            RestorePilotDefaultVisuals(pilot);
-        }
-
-        if (_net.IsServer)
-            _pilotsInCombatMechs.Remove(pilot);
-        RemCompDeferred<InsideCombatVehicleComponent>(pilot);
-        RemComp<RelayInputMoverComponent>(pilot);
-        // SetRelay puts the relay target on the mech, not the pilot.
-        RemComp<MovementRelayTargetComponent>(ent);
-        RemCompDeferred<InteractionRelayComponent>(pilot);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
-
         if (_net.IsServer)
         {
             TransferWeaponToMech(ent, pilot, true);
             TransferWeaponToMech(ent, pilot, false);
         }
 
+        RemCompDeferred<InsideCombatVehicleComponent>(pilot);
+
         _audio.PlayPredicted(ent.Comp.EnterSound, ent, pilot);
-        UpdateAppearance(ent);
     }
 
     private bool TransferWeaponToPilot(Entity<CombatMechComponent> ent, EntityUid pilot, bool primary)
@@ -221,10 +201,7 @@ public sealed partial class CombatMechSystem
         if (TryComp(pilot, out BuckleComponent? buckle))
         {
             if (_buckle.TryUnbuckle(pilot, pilot, buckle, popup: false))
-            {
-                UpdateAppearance(mech);
                 return;
-            }
 
             // TryUnbuckle was blocked by an event; force-release through the no-check Unbuckle.
             // It still raises UnstrappedEvent so OnUnstrapped runs the normal weapon-return path.
@@ -233,43 +210,15 @@ public sealed partial class CombatMechSystem
 
         // Last-resort cleanup if buckle is missing or Unbuckle did not propagate to OnUnstrapped.
         if (mech.Comp.PilotEntity == pilot)
-            CleanupFailedPilotStrap(mech, pilot);
-
-        UpdateAppearance(mech);
-    }
-
-    private void CleanupFailedPilotStrap(Entity<CombatMechComponent> mech, EntityUid pilot)
-    {
-        // TryUnbuckle failed; pilot is still physically buckled.
-        // Return any weapons that were partially transferred before the failure so the
-        // mech slot is not permanently empty and the pilot is not stuck with an
-        // unremoveable weapon they cannot drop.
-        if (_net.IsServer)
         {
-            TransferWeaponToMech(mech, pilot, true);
-            TransferWeaponToMech(mech, pilot, false);
-        }
+            if (_net.IsServer)
+            {
+                TransferWeaponToMech(mech, pilot, true);
+                TransferWeaponToMech(mech, pilot, false);
+            }
 
-        mech.Comp.PilotEntity = null;
-        DirtyField(mech.Owner, mech.Comp, nameof(CombatMechComponent.PilotEntity));
-
-        if (TryComp(pilot, out InsideCombatVehicleComponent? inside))
-        {
-            RestorePilotProtection((pilot, inside));
-            RestorePilotVisuals((pilot, inside));
+            RemCompDeferred<InsideCombatVehicleComponent>(pilot);
         }
-        else
-        {
-            RestorePilotDefaultVisuals(pilot);
-        }
-
-        if (_net.IsServer)
-            _pilotsInCombatMechs.Remove(pilot);
-        RemCompDeferred<InsideCombatVehicleComponent>(pilot);
-        RemComp<RelayInputMoverComponent>(pilot);
-        RemComp<MovementRelayTargetComponent>(mech);
-        RemCompDeferred<InteractionRelayComponent>(pilot);
-        _movementSpeed.RefreshMovementSpeedModifiers(mech);
     }
 
     private void OnInsideVehicleMove(Entity<InsideCombatVehicleComponent> ent, ref MoveEvent args)
@@ -299,6 +248,7 @@ public sealed partial class CombatMechSystem
             {
                 mech.PilotEntity = null;
                 DirtyField(ent.Comp.Vehicle, mech, nameof(CombatMechComponent.PilotEntity));
+                _movementSpeed.RefreshMovementSpeedModifiers(ent.Comp.Vehicle);
                 UpdateAppearance((ent.Comp.Vehicle, mech));
             }
         }
@@ -325,7 +275,6 @@ public sealed partial class CombatMechSystem
         if (!HasLiveVehicle(pilot) ||
             !TryComp(pilot.Comp.Vehicle, out CombatMechComponent? mech))
         {
-            RestorePilotVisuals(pilot);
             return;
         }
 
@@ -336,6 +285,7 @@ public sealed partial class CombatMechSystem
     {
         UpdatePilotVisualOffset(pilot, mech);
         SetPilotRenderOrder(pilot, mech.Comp.PilotRenderOrder);
+        _rmcSprite.UpdateDrawDepth(pilot);
     }
 
     private void UpdatePilotVisualOffset(Entity<InsideCombatVehicleComponent> pilot)
@@ -343,7 +293,6 @@ public sealed partial class CombatMechSystem
         if (!HasLiveVehicle(pilot) ||
             !TryComp(pilot.Comp.Vehicle, out CombatMechComponent? mech))
         {
-            RestorePilotVisualOffset(pilot.Owner);
             return;
         }
 
@@ -374,10 +323,19 @@ public sealed partial class CombatMechSystem
         RestorePilotDefaultVisuals(pilot.Owner);
     }
 
+    // Zero the SpriteSetRenderOrder fields rather than removing the component:
+    // the visualizer FrameUpdate keeps applying these (so removal would skip the
+    // last reset), and removal/re-add on every strap cycle causes the bouncing
+    // pattern that previously broke render order on re-entry.
     private void RestorePilotDefaultVisuals(EntityUid pilot)
     {
-        if (_net.IsServer)
-            RemCompDeferred<CombatMechPilotVisualsComponent>(pilot);
+        if (_net.IsServer && HasComp<SpriteSetRenderOrderComponent>(pilot))
+        {
+            _rmcSprite.SetOffset(pilot, Vector2.Zero);
+            _rmcSprite.SetRenderOrder(pilot, 0);
+        }
+
+        _rmcSprite.UpdateDrawDepth(pilot);
     }
 
     private void SetPilotVisualOffset(EntityUid pilot, Vector2 offset)
@@ -385,12 +343,7 @@ public sealed partial class CombatMechSystem
         if (!_net.IsServer)
             return;
 
-        var visuals = EnsureComp<CombatMechPilotVisualsComponent>(pilot);
-        if (visuals.Offset == offset)
-            return;
-
-        visuals.Offset = offset;
-        Dirty(pilot, visuals);
+        _rmcSprite.SetOffset(pilot, offset);
     }
 
     private void SetPilotRenderOrder(EntityUid pilot, int renderOrder)
@@ -398,11 +351,6 @@ public sealed partial class CombatMechSystem
         if (!_net.IsServer)
             return;
 
-        var visuals = EnsureComp<CombatMechPilotVisualsComponent>(pilot);
-        if (visuals.RenderOrder == renderOrder)
-            return;
-
-        visuals.RenderOrder = renderOrder;
-        Dirty(pilot, visuals);
+        _rmcSprite.SetRenderOrder(pilot, renderOrder);
     }
 }

@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: [ CMBaseWeaponGun, BaseItem, RMCBaseWeaponGunMagazineProvider, RMCBaseAttachableHolder ]
+  parent: [ CMBaseWeaponGun, BaseItem, RMCBaseAttachableHolder ]
   id: StoriesWeaponRX47Base
   components:
   - type: Item
@@ -11,13 +11,6 @@
   - type: GunIFF
     enabled: true
   - type: GunPointBlank
-  - type: ContainerContainer
-    containers:
-      gun_magazine: !type:ContainerSlot
-      gun_chamber: !type:ContainerSlot
-  - type: MagazineAmmoProvider
-    autoEject: false
-  - type: RMCAmmoEject
   - type: Appearance
   - type: GunSkilledRecoil
     setRecoil: 0
@@ -71,16 +64,11 @@
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 1
         shotsToMaxScatter: 30
-  - type: ItemSlots
-    slots:
-      gun_magazine:
-        name: Magazine
-        locked: true
-        startingItem: StoriesMagazineRX47Chaingun
-        priority: 2
-        whitelist:
-          tags:
-          - StoriesMagazineRX47Chaingun
+  - type: BallisticAmmoProvider
+    cycleable: false
+    mayTransfer: false
+    proto: StoriesCartridgeRX47Chaingun
+    capacity: 5000
 
 - type: entity
   parent: [ CMBaseWeaponGun, BaseItem, RMCBaseAttachableHolder ]
@@ -178,16 +166,16 @@
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 1
         shotsToMaxScatter: 30
+  - type: BallisticAmmoProvider
+    cycleable: false
+    mayTransfer: false
+    proto: StoriesCartridgeRX47Cupola
+    capacity: 3000
+  - type: ContainerContainer
+    containers:
+      rx47_flamer_tank: !type:ContainerSlot
   - type: ItemSlots
     slots:
-      gun_magazine:
-        name: Magazine
-        locked: true
-        startingItem: StoriesMagazineRX47Cupola
-        priority: 2
-        whitelist:
-          tags:
-          - StoriesMagazineRX47Cupola
       rx47_flamer_tank:
         name: Flamer tank
         startingItem: StoriesRX47FlamerTank
@@ -242,16 +230,16 @@
     scatterWielded: 8
     scatterUnwielded: 8
     baseFireRate: 1.5
+  - type: BallisticAmmoProvider
+    cycleable: false
+    mayTransfer: false
+    proto: StoriesCartridgeRX47Scattergun
+    capacity: 1000
+  - type: ContainerContainer
+    containers:
+      rx47_flamer_tank: !type:ContainerSlot
   - type: ItemSlots
     slots:
-      gun_magazine:
-        name: Magazine
-        locked: true
-        startingItem: StoriesMagazineRX47Scattergun
-        priority: 2
-        whitelist:
-          tags:
-          - StoriesMagazineRX47Scattergun
       rx47_flamer_tank:
         name: Flamer tank
         startingItem: StoriesRX47FlamerTank
@@ -298,6 +286,9 @@
       state: all
   - type: RMCFlamerAmmoProvider
   - type: RMCIgniter
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -308,59 +299,6 @@
         whitelist:
           tags:
           - RMCTankFlamer
-
-# Magazines use mayTransfer: false and locked slots so pilots cannot manually reload mid-combat.
-# Capacities are sized for event-scale gameplay and are intentionally large.
-- type: entity
-  parent: CMMagazineRifleBase
-  id: StoriesMagazineRX47Chaingun
-  name: RX47 chaingun drum (20x102mm)
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Tag
-    tags:
-    - StoriesMagazineRX47Chaingun
-  - type: BallisticAmmoProvider
-    mayTransfer: false
-    whitelist:
-      tags:
-      - StoriesCartridgeRX47Chaingun
-    proto: StoriesCartridgeRX47Chaingun
-    capacity: 5000
-
-- type: entity
-  parent: CMMagazineRifleBase
-  id: StoriesMagazineRX47Cupola
-  name: RX47 cupola drum (10x30mm)
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Tag
-    tags:
-    - StoriesMagazineRX47Cupola
-  - type: BallisticAmmoProvider
-    mayTransfer: false
-    whitelist:
-      tags:
-      - StoriesCartridgeRX47Cupola
-    proto: StoriesCartridgeRX47Cupola
-    capacity: 3000
-
-- type: entity
-  parent: CMMagazineRifleBase
-  id: StoriesMagazineRX47Scattergun
-  name: RX47 scattergun hopper
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Tag
-    tags:
-    - StoriesMagazineRX47Scattergun
-  - type: BallisticAmmoProvider
-    mayTransfer: false
-    whitelist:
-      tags:
-      - StoriesCartridgeRX47Scattergun
-    proto: StoriesCartridgeRX47Scattergun
-    capacity: 1000
 
 - type: entity
   parent: RMCTankFlamer
@@ -525,15 +463,6 @@
     thresholds:
     - range: 5
       falloff: 20
-
-- type: Tag
-  id: StoriesMagazineRX47Chaingun
-
-- type: Tag
-  id: StoriesMagazineRX47Cupola
-
-- type: Tag
-  id: StoriesMagazineRX47Scattergun
 
 - type: Tag
   id: StoriesCartridgeRX47Chaingun

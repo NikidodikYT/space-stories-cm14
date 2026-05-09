@@ -63,6 +63,9 @@ public sealed partial class CombatMechSystem
             return;
 
         args.Handled = true;
+        if (_net.IsClient)
+            return;
+
         InstallWeapon(ent, args.User, args.Used.Value, args.Primary);
     }
 
@@ -72,6 +75,9 @@ public sealed partial class CombatMechSystem
             return;
 
         args.Handled = true;
+        if (_net.IsClient)
+            return;
+
         DetachWeapon(ent, args.User, args.Primary);
     }
 
@@ -117,11 +123,14 @@ public sealed partial class CombatMechSystem
         if (_doAfter.TryStartDoAfter(doAfter))
         {
             SetInstallInProgress(mech, primary, true);
-            var slot = GetSlotName(primary);
-            _popup.PopupPredicted(Loc.GetString("stories-rx47-weapon-install-start-self", ("slot", slot)),
-                Loc.GetString("stories-rx47-weapon-install-start-others", ("user", user), ("slot", slot)),
-                user,
-                user);
+            if (_timing.IsFirstTimePredicted)
+            {
+                var slot = GetSlotName(primary);
+                _popup.PopupPredicted(Loc.GetString("stories-rx47-weapon-install-start-self", ("slot", slot)),
+                    Loc.GetString("stories-rx47-weapon-install-start-others", ("user", user), ("slot", slot)),
+                    user,
+                    user);
+            }
         }
     }
 
@@ -154,11 +163,14 @@ public sealed partial class CombatMechSystem
 
         if (_doAfter.TryStartDoAfter(doAfter))
         {
-            var slot = GetSlotName(primary);
-            _popup.PopupPredicted(Loc.GetString("stories-rx47-weapon-detach-start-self", ("slot", slot)),
-                Loc.GetString("stories-rx47-weapon-detach-start-others", ("user", user), ("slot", slot)),
-                user,
-                user);
+            if (_timing.IsFirstTimePredicted)
+            {
+                var slot = GetSlotName(primary);
+                _popup.PopupPredicted(Loc.GetString("stories-rx47-weapon-detach-start-self", ("slot", slot)),
+                    Loc.GetString("stories-rx47-weapon-detach-start-others", ("user", user), ("slot", slot)),
+                    user,
+                    user);
+            }
         }
     }
 
@@ -283,18 +295,21 @@ public sealed partial class CombatMechSystem
 
     private EntityCoordinates GetSafeWeaponDropCoordinates(Entity<CombatMechComponent> mech, EntityUid user)
     {
-        var mechCoords = _transform.ToMapCoordinates(_transform.GetMoverCoordinates(mech.Owner));
-        var userCoords = _transform.ToMapCoordinates(_transform.GetMoverCoordinates(user));
-        if (mechCoords.MapId != userCoords.MapId)
-            return Transform(mech.Owner).Coordinates.Offset(new Vector2(0f, -WeaponDetachDropDistance));
+        var mechXform = Transform(mech.Owner);
+        var mechMap = _transform.GetMapCoordinates(mech.Owner, mechXform);
+        var userMap = _transform.GetMapCoordinates(user);
+        if (mechMap.MapId != userMap.MapId)
+            return mechXform.Coordinates.Offset(new Vector2(0f, -WeaponDetachDropDistance));
 
-        var direction = userCoords.Position - mechCoords.Position;
+        var direction = userMap.Position - mechMap.Position;
         if (direction.LengthSquared() < DirectionEpsilon)
             direction = new Vector2(0f, -1f);
         else
             direction = direction.Normalized();
 
-        return _transform.ToCoordinates(new MapCoordinates(mechCoords.Position + direction * WeaponDetachDropDistance, mechCoords.MapId));
+        var parentRotation = _transform.GetWorldRotation(mechXform.ParentUid);
+        var localDirection = (-parentRotation).RotateVec(direction);
+        return mechXform.Coordinates.Offset(localDirection * WeaponDetachDropDistance);
     }
 
     private void OnWeaponGetAlternativeVerbs(Entity<CombatMechWeaponComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)

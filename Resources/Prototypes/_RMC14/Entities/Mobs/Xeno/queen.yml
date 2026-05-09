@@ -36,7 +36,6 @@
       sprite: _Stories/Mobs/Xenos/Queen/queen_spit.rsi
       state: spit
       visible: false
-      offset: 0, 0.875
   - type: MobState
     allowedStates:
     - Alive
@@ -122,8 +121,6 @@
     damage:
       groups:
         Brute: 40
-  - type: CombatMechMeleeDamageMultiplier
-    multiplier: 2
   - type: XenoTailStab
     tailDamage:
       groups:

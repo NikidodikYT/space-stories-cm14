@@ -184,10 +184,7 @@ public sealed partial class CombatMechSystem
             return;
 
         if (!HasLiveVehicle(pilot))
-        {
-            RestorePilotProtection(pilot);
             return;
-        }
 
         if (TryComp(pilot, out InfectableComponent? infectable) && !infectable.BeingInfected)
         {

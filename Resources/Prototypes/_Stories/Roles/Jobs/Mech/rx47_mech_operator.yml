@@ -7,7 +7,7 @@
   ranks:
     RMCRankSergeant: []
   startingGear: StoriesGearMechOperator
-  icon: "StoriesJobIconMechOperator"
+  icon: "CMJobIconPilotDropship"
   joinNotifyCrew: false
   supervisors: cm-job-supervisors-staff
   accessGroups:
@@ -39,7 +39,7 @@
   ranks:
     RMCRankStaffSergeant: []
   startingGear: StoriesGearLeadMechOperator
-  icon: "StoriesJobIconLeadMechOperator"
+  icon: "CMJobIconPilotGunship"
   special:
   - !type:AddComponentSpecial
     components:
@@ -62,11 +62,12 @@
   equipment:
     jumpsuit: CMJumpsuitMarineTanker
     shoes: CMBootsBlackFilled
-    head: StoriesArmorHelmetM10Tanker
+    head: STArmorHelmetM50
+    outerClothing: STArmorM3Tanker
     gloves: CMHandsBlackInsulated
     id: StoriesIDCardMechOperator
     ears: StoriesHeadsetMech
-    back: RMCSatchelWelder
+    back: STWeldingKit
     belt: RMCHolsterSMGPouchFilledExtended
     pocket1: RMCPouchGeneralLarge
     pocket2: RMCPouchToolsSocFilledSOF
@@ -76,28 +77,15 @@
   equipment:
     jumpsuit: CMJumpsuitMarineTanker
     shoes: CMBootsBlackFilled
-    head: StoriesArmorHelmetM10Tanker
+    head: STArmorHelmetM50
+    outerClothing: STArmorM3Tanker
     gloves: CMHandsBlackInsulated
     id: StoriesIDCardLeadMechOperator
     ears: StoriesHeadsetMech
-    back: RMCSatchelWelder
+    back: STWeldingKit
     belt: RMCHolsterSMGPouchFilledExtended
     pocket1: RMCPouchGeneralLarge
     pocket2: RMCPouchToolsSocFilledSOF
-
-- type: jobIcon
-  parent: CMJobIconBase
-  id: StoriesJobIconMechOperator
-  icon:
-    sprite: _RMC14/Interface/cm_job_icons.rsi
-    state: hudsquad_mech
-
-- type: jobIcon
-  parent: CMJobIconBase
-  id: StoriesJobIconLeadMechOperator
-  icon:
-    sprite: _RMC14/Interface/cm_job_icons.rsi
-    state: hudsquad_mech_lead
 
 - type: entity
   parent: CMIDCardGold

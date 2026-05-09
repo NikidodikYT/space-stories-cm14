@@ -79,8 +79,6 @@ public sealed partial class CombatMechSystem
         if (!args.DamageIncreased || args.Damageable.TotalDamage <= 0)
             return;
 
-        FlashMechDamage(ent);
-
         var pilot = GetPilot(ent);
         if (pilot == null)
             return;
@@ -101,6 +99,14 @@ public sealed partial class CombatMechSystem
             _audio.PlayEntity(ent.Comp.DamageAlertSound, pilot.Value, ent);
             _popup.PopupClient(Loc.GetString("stories-rx47-alert-damaged"), ent, pilot.Value, PopupType.MediumCaution);
         }
+    }
+
+    private void OnBeforeDamageChanged(Entity<CombatMechComponent> ent, ref BeforeDamageChangedEvent args)
+    {
+        if (_net.IsClient || args.Cancelled || args.Damage.GetTotal() <= 0)
+            return;
+
+        FlashMechDamage(ent);
     }
 
     private void OnInteractUsing(Entity<CombatMechComponent> ent, ref InteractUsingEvent args)
@@ -392,13 +398,7 @@ public sealed partial class CombatMechSystem
             return;
         }
 
-        RestorePilotProtection((pilot, inside));
-        RestorePilotVisuals((pilot, inside));
-        if (_net.IsServer)
-            _pilotsInCombatMechs.Remove(pilot);
         RemCompDeferred<InsideCombatVehicleComponent>(pilot);
-        RemComp<RelayInputMoverComponent>(pilot);
-        RemCompDeferred<InteractionRelayComponent>(pilot);
     }
 
     private void QueueDeleteMountedWeapons(Entity<CombatMechComponent> ent)
@@ -455,7 +455,6 @@ public sealed partial class CombatMechSystem
         _appearance.SetData(ent, CombatMechVisuals.MarkingsColor, ent.Comp.MarkingsColorState);
         _appearance.SetData(ent, CombatMechVisuals.MarkingsSpecialty, ent.Comp.MarkingsSpecialtyState);
         _appearance.SetData(ent, CombatMechVisuals.HasTowLauncher, ent.Comp.HasTowLauncher);
-        _appearance.SetData(ent, CombatMechVisuals.HelmetClosed, ent.Comp.HelmetClosed);
 
         if (_net.IsServer)
             EnsureBodyOverlay(ent);
@@ -494,11 +493,13 @@ public sealed partial class CombatMechSystem
 
     private void FlashMechDamage(Entity<CombatMechComponent> ent)
     {
-        EnsureBodyOverlay(ent);
-
         _flashTargets.Clear();
         _flashTargets.Add(ent.Owner);
 
+        // Overlay shares the mech damage path: flash it on the same network event as the base
+        // so its color animation starts in the same client tick, not after a follow-up update.
+        // Skip EnsureBodyOverlay here - a freshly spawned overlay would not yet have its NetEntity
+        // replicated to clients in time for this event; rely on map-init / appearance-update spawn.
         if (ent.Comp.BodyOverlayEntity is { } overlay && !Deleted(overlay))
             _flashTargets.Add(overlay);
 
@@ -792,8 +793,7 @@ public sealed partial class CombatMechSystem
 
     private bool CanBumperDamageTarget(EntityUid target)
     {
-        return HasComp<BarricadeComponent>(target) ||
-               HasComp<CombatMechBumpDamageableComponent>(target);
+        return HasComp<BarricadeComponent>(target);
     }
 
     private static DamageSpecifier CreateBluntDamage(float amount)

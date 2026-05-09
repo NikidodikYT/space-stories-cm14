@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Slow;
+using Content.Shared._RMC14.Sprite;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Suicide;
@@ -54,7 +55,6 @@ using Content.Shared.StatusEffect;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Stunnable;
 using Content.Shared.Verbs;
-using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Whitelist;
@@ -118,6 +118,7 @@ public sealed partial class CombatMechSystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly RMCPullingSystem _rmcPulling = default!;
+    [Dependency] private readonly SharedRMCSpriteSystem _rmcSprite = default!;
     [Dependency] private readonly SkillsSystem _skills = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
     [Dependency] private readonly StandingStateSystem _standingState = default!;
@@ -141,6 +142,7 @@ public sealed partial class CombatMechSystem : EntitySystem
         SubscribeLocalEvent<CombatMechComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshSpeed);
         SubscribeLocalEvent<CombatMechComponent, GetIFFGunUserEvent>(OnGetIFFGunUser);
         SubscribeLocalEvent<CombatMechComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<CombatMechComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
         SubscribeLocalEvent<CombatMechComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<CombatMechComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<CombatMechComponent, DropAttemptEvent>(OnMechDropAttempt);
@@ -194,7 +196,6 @@ public sealed partial class CombatMechSystem : EntitySystem
         SubscribeLocalEvent<InsideCombatVehicleComponent, GetVerbsEvent<Verb>>(
             OnInsideVehicleGetVerbs,
             after: [typeof(RMCSuicideSystem)]);
-        SubscribeLocalEvent<CombatMechMeleeDamageMultiplierComponent, MeleeHitEvent>(OnCombatMechMeleeHit);
     }
 
     public override void Update(float frameTime)
@@ -209,6 +210,11 @@ public sealed partial class CombatMechSystem : EntitySystem
 
             mech.DefaultWeaponEnsureQueued = false;
             mech.DefaultWeaponEnsureAttempts++;
+            var oldPrimary = mech.PrimaryWeaponEntity;
+            var oldSecondary = mech.SecondaryWeaponEntity;
+            var oldPrimaryState = mech.PrimaryWeaponState;
+            var oldSecondaryState = mech.SecondaryWeaponState;
+
             var primaryReady = EnsureWeapon((pending, mech), true);
             var secondaryReady = EnsureWeapon((pending, mech), false);
             if (!primaryReady || !secondaryReady)
@@ -230,7 +236,14 @@ public sealed partial class CombatMechSystem : EntitySystem
                 mech.DefaultWeaponEnsureAttempts = 0;
             }
 
-            UpdateAppearance((pending, mech));
+            if (primaryReady && secondaryReady ||
+                oldPrimary != mech.PrimaryWeaponEntity ||
+                oldSecondary != mech.SecondaryWeaponEntity ||
+                oldPrimaryState != mech.PrimaryWeaponState ||
+                oldSecondaryState != mech.SecondaryWeaponState)
+            {
+                UpdateAppearance((pending, mech));
+            }
         }
 
         _protectionCleanupAccumulator += frameTime;
@@ -252,7 +265,7 @@ public sealed partial class CombatMechSystem : EntitySystem
         foreach (var uid in _pilotsInCombatMechs)
         {
             if (!TryComp(uid, out InsideCombatVehicleComponent? inside) ||
-                Deleted(inside.Vehicle))
+                !HasLiveVehicle((uid, inside)))
             {
                 _stalePilots.Add(uid);
                 continue;
@@ -269,12 +282,6 @@ public sealed partial class CombatMechSystem : EntitySystem
 
         foreach (var uid in _stalePilots)
         {
-            _pilotsInCombatMechs.Remove(uid);
-            if (!TryComp(uid, out InsideCombatVehicleComponent? inside))
-                continue;
-
-            RestorePilotProtection((uid, inside));
-            RestorePilotVisuals((uid, inside));
             RemCompDeferred<InsideCombatVehicleComponent>(uid);
         }
     }
